@@ -105,7 +105,7 @@ são aquelas regras que sempre existiram na empresa e eram executadas de forma m
 ## PROPOSTAS DE MELHORIA
 
 - Construir a aplicação em microsserviços, o que possibilita a utilização de um Broker, como RabbitMQ, para lidar com as trocas de mensagens entre os serviços,
-isso melhoraria a estruturação e manutenção de todo o sistema.
+isso melhoraria a estruturação, manutenção e confiabilidade de todo o sistema.
 - Migrar a utilização de bancos e outras ferramentas para o Docker.
 - A depender da composição e necessidade do projeto, poderia se estudar a utilização de um banco NoSQL, como MongoDB,
 a fim de trazer flexibilidade e dinamismo para a estruturação dos documentos.
@@ -120,7 +120,7 @@ derrubando servidor.
   <img align="center" alt="swagger" src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white" />
 </div>
 
-### :sunglasses: Autor
+### Autor
 
 Criado por João Pedro Caetano.
 
