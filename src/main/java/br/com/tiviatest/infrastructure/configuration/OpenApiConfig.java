@@ -1,8 +1,10 @@
 package br.com.tiviatest.infrastructure.configuration;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,9 @@ public class OpenApiConfig {
                         .description("API developed for a Java test.")
                         .contact(new Contact()
                                 .name("João Pedro Caetano")
-                                .email("caetanojpo@gmail.com")));
+                                .email("caetanojpo@gmail.com")))
+                .components(new Components()
+                        .addSecuritySchemes("bearer-key", new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+
     }
 }

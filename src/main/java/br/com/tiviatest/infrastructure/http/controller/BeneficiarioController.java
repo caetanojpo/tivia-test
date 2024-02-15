@@ -12,6 +12,7 @@ import br.com.tiviatest.usecase.beneficiario.UpdateBeneficiario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequestMapping("/api/beneficiarios")
 @RequiredArgsConstructor
 @Tag(name = "beneficiario")
+@SecurityRequirement(name = "bearer-key")
 public class BeneficiarioController {
 
 
