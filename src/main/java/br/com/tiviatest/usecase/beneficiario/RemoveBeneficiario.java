@@ -13,7 +13,7 @@ public class RemoveBeneficiario {
         this.find = find;
     }
 
-    public void execute(Long id){
+    public void execute(Long id) {
         Beneficiario beneficiario = find.byId(id);
         repository.delete(beneficiario.getId());
     }

@@ -1,6 +1,5 @@
 package br.com.tiviatest.infrastructure.http.dto.response;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

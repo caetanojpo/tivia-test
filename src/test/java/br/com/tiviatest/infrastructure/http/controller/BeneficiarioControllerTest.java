@@ -1,12 +1,10 @@
 package br.com.tiviatest.infrastructure.http.controller;
 
 import br.com.tiviatest.domain.model.Beneficiario;
-import br.com.tiviatest.infrastructure.database.schema.UserSchema;
 import br.com.tiviatest.infrastructure.http.dto.request.BeneficiarioCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.BeneficiarioUpdateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.BeneficiarioResponse;
-import br.com.tiviatest.infrastructure.security.TokenService;
 import br.com.tiviatest.usecase.beneficiario.CreateBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.FindBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.RemoveBeneficiario;
@@ -15,23 +13,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -45,17 +36,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-@AutoConfigureJsonTesters
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration
 class BeneficiarioControllerTest {
 
     @Autowired
@@ -81,7 +74,7 @@ class BeneficiarioControllerTest {
 
     @Test
     @DisplayName("Find by ID: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void byId() throws Exception {
         Beneficiario mockedBeneficiario = mockBeneficiario();
 
@@ -102,11 +95,13 @@ class BeneficiarioControllerTest {
         BeneficiarioResponse response = objectMapper.readValue(responseBody, BeneficiarioResponse.class);
 
         doAssertions(response, mockedBeneficiario);
+
+        verify(find, times(1)).byId(anyLong());
     }
 
     @Test
     @DisplayName("Find All: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void all() throws Exception {
 
         Beneficiario mockedBeneficiario1 = mockBeneficiario();
@@ -124,11 +119,13 @@ class BeneficiarioControllerTest {
         mvc.perform(get(ROUTE)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andReturn();
+
+        verify(find, times(1)).all();
     }
 
     @Test
     @DisplayName("Create without Documentos List: Should return HTTP 201")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void save_first_scenario() throws Exception {
 
         BeneficiarioCreateRequest request = new BeneficiarioCreateRequest("Teste", "+551111111", Date.valueOf("2000-01-01"), null);
@@ -156,11 +153,13 @@ class BeneficiarioControllerTest {
 
         doAssertions(response, mockedBeneficiario);
 
+        verify(create, times(1)).execute(any());
+
     }
 
     @Test
     @DisplayName("Create with Documentos List: Should return HTTP 201")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void save_second_scenario() throws Exception {
 
         DocumentoCreateRequest documentoCreateRequest1 = new DocumentoCreateRequest("CPF", "11111111");
@@ -194,17 +193,19 @@ class BeneficiarioControllerTest {
 
         doAssertions(response, mockedBeneficiario);
 
+        verify(create, times(1)).execute(any());
+
     }
 
     @Test
     @DisplayName("Update: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void update() throws Exception {
 
         BeneficiarioUpdateRequest beneficiarioUpdateRequest = new BeneficiarioUpdateRequest("Testado", null, null);
         Beneficiario mockedBeneficiario = mockBeneficiario();
 
-        when(update.execute(any(), any())).thenReturn(mockedBeneficiario);
+        when(update.execute(anyLong(), any())).thenReturn(mockedBeneficiario);
 
         MvcResult result = mvc.perform(put(ROUTE + "/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -224,25 +225,28 @@ class BeneficiarioControllerTest {
         BeneficiarioResponse response = objectMapper.readValue(responseBody, BeneficiarioResponse.class);
 
         doAssertions(response, mockedBeneficiario);
+
+        verify(update, times(1)).execute(anyLong(), any());
     }
 
     @Test
     @DisplayName("Delete: Should return HTTP 204")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void remove() throws Exception {
-
 
         doNothing().when(remove).execute(id);
 
         MvcResult result = mvc.perform(delete(ROUTE + "/{id}", id))
                 .andExpect(status().isNoContent())
                 .andReturn();
+
+        verify(remove, times(1)).execute(anyLong());
     }
 
     @ParameterizedTest
     @MethodSource("getBadRequests")
     @DisplayName("Should return HTTP 400 when the input data are invalid")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void badRequest(MockHttpServletRequestBuilder httpMethod) throws Exception {
 
         var response = mvc

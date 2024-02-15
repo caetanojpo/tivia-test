@@ -1,11 +1,8 @@
 package br.com.tiviatest.usecase.beneficiario;
 
 import br.com.tiviatest.domain.model.Beneficiario;
-import br.com.tiviatest.domain.model.Documento;
 import br.com.tiviatest.domain.repository.BeneficiarioRepository;
 import br.com.tiviatest.usecase.documento.CreateDocumento;
-
-import java.util.List;
 
 public class CreateBeneficiario {
 
@@ -27,7 +24,7 @@ public class CreateBeneficiario {
         return savedBeneficiario;
     }
 
-    private void validateAndCreateDocumentos(Beneficiario beneficiario){
+    private void validateAndCreateDocumentos(Beneficiario beneficiario) {
         if (beneficiario.getDocumentos() != null && !beneficiario.getDocumentos().isEmpty()) {
             beneficiario.getDocumentos().forEach(documento -> {
                 documento.setBeneficiario(beneficiario);

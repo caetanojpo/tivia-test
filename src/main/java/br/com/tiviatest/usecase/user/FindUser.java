@@ -11,7 +11,7 @@ public class FindUser {
         this.repository = repository;
     }
 
-    public User byEmail(String email){
+    public User byEmail(String email) {
         return repository.findByEmail(email);
     }
 }

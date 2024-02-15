@@ -4,7 +4,6 @@ import br.com.tiviatest.domain.model.Documento;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoUpdatedRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.DocumentoResponse;
-import br.com.tiviatest.infrastructure.security.TokenService;
 import br.com.tiviatest.usecase.documento.CreateDocumento;
 import br.com.tiviatest.usecase.documento.FindDocumento;
 import br.com.tiviatest.usecase.documento.RemoveDocumento;
@@ -17,7 +16,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,15 +34,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-@AutoConfigureJsonTesters
 class DocumentoControllerTest {
 
     @Autowired
@@ -52,9 +54,6 @@ class DocumentoControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private TokenService token;
 
     @MockBean
     private FindDocumento find;
@@ -73,10 +72,8 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Find by ID: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void byId() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
         Documento mockedDocumento = mockDocumento();
 
         when(find.byId(anyLong())).thenReturn(mockedDocumento);
@@ -94,15 +91,14 @@ class DocumentoControllerTest {
         DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
 
         doAssertions(response, mockedDocumento);
+
+        verify(find, times(1)).byId(any());
     }
 
     @Test
     @DisplayName("Find All by Documento ID: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void allByDocumentoId() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
-
         Documento mockedDocumento1 = mockDocumento();
         Documento mockedDocumento2 = mockDocumento();
         Documento mockedDocumento3 = mockDocumento();
@@ -118,15 +114,14 @@ class DocumentoControllerTest {
         mvc.perform(get(ROUTE + "/beneficiario/{id}", id)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andReturn();
+
+        verify(find, times(1)).allByBeneficiarioId(any());
     }
 
     @Test
     @DisplayName("Find All: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void all() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
-
         Documento mockedDocumento1 = mockDocumento();
         Documento mockedDocumento2 = mockDocumento();
         Documento mockedDocumento3 = mockDocumento();
@@ -142,14 +137,14 @@ class DocumentoControllerTest {
         mvc.perform(get(ROUTE)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andReturn();
+
+        verify(find, times(1)).all();
     }
 
     @Test
     @DisplayName("Create: Should return HTTP 201")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void save() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
         DocumentoCreateRequest request = new DocumentoCreateRequest("Teste", "551111111");
 
         Documento mockedDocumento = mockDocumento();
@@ -172,14 +167,14 @@ class DocumentoControllerTest {
         DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
 
         doAssertions(response, mockedDocumento);
+
+        verify(create, times(1)).execute(anyLong(), any());
     }
 
     @Test
     @DisplayName("Update: Should return HTTP 200")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void update() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
         DocumentoUpdatedRequest request = new DocumentoUpdatedRequest("Teste", "551111111");
 
         Documento mockedDocumento = mockDocumento();
@@ -202,28 +197,28 @@ class DocumentoControllerTest {
         DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
 
         doAssertions(response, mockedDocumento);
+        verify(update, times(1)).execute(anyLong(), any());
     }
 
     @Test
     @DisplayName("Delete: Should return HTTP 204")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void remove() throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
         doNothing().when(remove).execute(id);
 
         MvcResult result = mvc.perform(delete(ROUTE + "/{id}", id))
                 .andExpect(status().isNoContent())
                 .andReturn();
+
+        verify(remove, times(1)).execute(anyLong());
     }
 
     @ParameterizedTest
     @MethodSource("getBadRequests")
     @DisplayName("Should return HTTP 400 when the input data are invalid")
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void badRequest(MockHttpServletRequestBuilder httpMethod) throws Exception {
-        String mockedSubject = "mockedTest";
-        when(token.getSubject(any())).thenReturn(mockedSubject);
+
         var response = mvc
                 .perform(httpMethod)
                 .andReturn().getResponse();
