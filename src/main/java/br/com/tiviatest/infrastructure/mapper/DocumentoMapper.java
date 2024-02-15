@@ -15,7 +15,6 @@ public interface DocumentoMapper {
 
     DocumentoMapper INSTANCE = Mappers.getMapper(DocumentoMapper.class);
 
-
     Documento toDocumento(DocumentoSchema documentoSchema);
 
     Documento toDocumento(DocumentoCreateRequest documentoCreateRequest);

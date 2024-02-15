@@ -22,8 +22,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public CreateBeneficiario createBeneficiario(BeneficiarioRepository beneficiarioRepository) {
-        return new CreateBeneficiario(beneficiarioRepository);
+    public CreateBeneficiario createBeneficiario(BeneficiarioRepository beneficiarioRepository, CreateDocumento createDocumento) {
+        return new CreateBeneficiario(beneficiarioRepository, createDocumento);
     }
 
     @Bean

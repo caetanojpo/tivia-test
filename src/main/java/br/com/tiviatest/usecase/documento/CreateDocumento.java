@@ -14,6 +14,10 @@ public class CreateDocumento {
         this.findBeneficiario = findBeneficiario;
     }
 
+    public Documento execute(Documento documento) {
+        return repository.save(documento);
+    }
+
     public Documento execute(Long beneficiarioId, Documento documento) {
         var beneficiario = findBeneficiario.byId(beneficiarioId);
         documento.setBeneficiario(beneficiario);

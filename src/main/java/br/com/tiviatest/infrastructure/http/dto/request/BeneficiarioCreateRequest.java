@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public record BeneficiarioCreateRequest(
 
@@ -22,6 +23,8 @@ public record BeneficiarioCreateRequest(
 
         @NotNull(message = "{NOT.NULL}")
         @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
-        Date dataNascimento
+        Date dataNascimento,
+
+        List<DocumentoCreateRequest> documentos
 ) {
 }

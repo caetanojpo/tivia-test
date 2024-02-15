@@ -6,6 +6,7 @@ import br.com.tiviatest.infrastructure.http.dto.request.BeneficiarioCreateReques
 import br.com.tiviatest.infrastructure.http.dto.request.BeneficiarioUpdateRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.BeneficiarioResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -14,21 +15,19 @@ public interface BeneficiarioMapper {
 
     BeneficiarioMapper INSTANCE = Mappers.getMapper(BeneficiarioMapper.class);
 
+    @Mapping(target = "documentos", source = "documentoSchemas")
     Beneficiario toBeneficiario(BeneficiarioSchema beneficiarioSchema);
 
+    @Mapping(target = "documentos", source = "documentos")
     Beneficiario toBeneficiario(BeneficiarioCreateRequest beneficiarioCreateRequest);
 
+    @Mapping(target = "documentos", ignore = true)
     Beneficiario toBeneficiario(BeneficiarioUpdateRequest beneficiarioUpdateRequest);
 
+    @Mapping(target = "documentoSchemas", source = "documentos")
     BeneficiarioSchema toBeneficiarioSchema(Beneficiario beneficiario);
 
-
+    @Mapping(target = "documentos", source = "documentos")
     BeneficiarioResponse toBeneficiarioResponse(Beneficiario beneficiario);
 
-//    List<DocumentoResponse> toDocumentosResponse(List<Documento> documentoList);
-
-//    @Named("mappingDocuments")
-////    default List<DocumentoResponse> mappingDocuments(List<Documento> documentos) {
-////        return toDocumentosResponse(documentos);
-////    }
 }

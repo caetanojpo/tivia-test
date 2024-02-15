@@ -51,5 +51,5 @@ public class BeneficiarioSchema {
     private LocalDateTime dataAtualizacao;
 
     @OneToMany(mappedBy = "beneficiarioSchema", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DocumentoSchema> documentos = new ArrayList<>();
+    private List<DocumentoSchema> documentoSchemas = new ArrayList<>();
 }

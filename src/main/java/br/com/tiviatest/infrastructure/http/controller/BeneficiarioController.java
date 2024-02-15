@@ -65,6 +65,7 @@ public class BeneficiarioController {
         return ResponseEntity.created(uri).body(beneficiarioResponse);
     }
 
+
     @PutMapping("{id}")
     public ResponseEntity<BeneficiarioResponse> update(@PathVariable Long id, @RequestBody @Valid BeneficiarioUpdateRequest beneficiarioRequest) {
         var beneficiario = mapper.toBeneficiario(beneficiarioRequest);
