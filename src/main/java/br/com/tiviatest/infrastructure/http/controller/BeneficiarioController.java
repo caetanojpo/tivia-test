@@ -16,21 +16,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api//beneficiarios")
+@RequestMapping("/api/beneficiarios")
 @RequiredArgsConstructor
 @Tag(name = "beneficiario")
 public class BeneficiarioController {
@@ -57,6 +50,10 @@ public class BeneficiarioController {
     }
 
     @GetMapping
+    @Operation(summary = "Lista todos os Beneficiarios", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de beneficiados buscada com sucesso")
+    })
     public ResponseEntity<List<BeneficiarioResponse>> all() {
         List<Beneficiario> beneficiarios = find.all();
 
@@ -66,6 +63,10 @@ public class BeneficiarioController {
     }
 
     @PostMapping
+    @Operation(summary = "Salvar um novo Beneficiario no banco.", method = "POST", description = "Informe os dados do beneficiario e/ou, também, informe os documentos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Beneficiário cadastrado com sucesso")
+    })
     public ResponseEntity<BeneficiarioResponse> save(@RequestBody @Valid BeneficiarioCreateRequest beneficiarioRequest, UriComponentsBuilder uriComponentsBuilder) {
         var beneficiario = mapper.toBeneficiario(beneficiarioRequest);
         var beneficiarioResponse = mapper.toBeneficiarioResponse(create.execute(beneficiario));
@@ -77,6 +78,11 @@ public class BeneficiarioController {
 
 
     @PutMapping("{id}")
+    @Operation(summary = "Atualizar os dados cadastrais de um Beneficiário por ID", method = "PUT", description = "Informe o ID do beneficiário na rota e envio o corpo para atualização.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Beneficiário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado")
+    })
     public ResponseEntity<BeneficiarioResponse> update(@PathVariable Long id, @RequestBody @Valid BeneficiarioUpdateRequest beneficiarioRequest) {
         var beneficiario = mapper.toBeneficiario(beneficiarioRequest);
         var beneficiarioResponse = mapper.toBeneficiarioResponse(update.execute(id, beneficiario));
@@ -85,6 +91,11 @@ public class BeneficiarioController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remover um Beneficiário por ID", method = "DELETE", description = "Informe o ID do beneficiário na rota para realizar sua exclusão.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Beneficiário deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado")
+    })
     public ResponseEntity<Void> remove(@PathVariable Long id) {
         remove.execute(id);
 
