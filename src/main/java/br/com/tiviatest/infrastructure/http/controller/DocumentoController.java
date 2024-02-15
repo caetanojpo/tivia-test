@@ -37,14 +37,14 @@ public class DocumentoController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentoResponse> byId(@PathVariable Long id){
+    public ResponseEntity<DocumentoResponse> byId(@PathVariable Long id) {
         var documentoResponse = mapper.toDocumentoResponse(find.byId(id));
 
         return ResponseEntity.ok(documentoResponse);
     }
 
     @GetMapping("/beneficiario/{beneficiarioId}")
-    public ResponseEntity<List<DocumentoResponse>> allByBeneficiarioId(@PathVariable Long beneficiarioId){
+    public ResponseEntity<List<DocumentoResponse>> allByBeneficiarioId(@PathVariable Long beneficiarioId) {
         List<Documento> documentos = find.allByBeneficiarioId(beneficiarioId);
 
         List<DocumentoResponse> documentoResponses = documentos.stream().map(DocumentoMapper.INSTANCE::toDocumentoResponse).toList();
@@ -53,7 +53,7 @@ public class DocumentoController {
     }
 
     @PostMapping("{beneficiarioId}")
-    public ResponseEntity<DocumentoResponse> save(@PathVariable Long beneficiarioId, @RequestBody @Valid DocumentoCreateRequest documentoCreateRequest, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<DocumentoResponse> save(@PathVariable Long beneficiarioId, @RequestBody @Valid DocumentoCreateRequest documentoCreateRequest, UriComponentsBuilder uriComponentsBuilder) {
         var documento = mapper.toDocumento(documentoCreateRequest);
         var createdDocumento = mapper.toDocumentoResponse(create.execute(beneficiarioId, documento));
 
@@ -61,7 +61,6 @@ public class DocumentoController {
 
         return ResponseEntity.created(uri).body(createdDocumento);
     }
-
 
 
 }

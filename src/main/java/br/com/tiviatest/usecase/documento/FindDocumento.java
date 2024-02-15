@@ -23,7 +23,6 @@ public class FindDocumento {
     }
 
     public List<Documento> allByBeneficiarioId(Long beneficiarioId){
-        Beneficiario beneficiario = findBeneficiario.byId(beneficiarioId);
-        return repository.findAllByBeneficiarioId(beneficiario);
+        return repository.findAllByBeneficiarioId(beneficiarioId);
     }
 }

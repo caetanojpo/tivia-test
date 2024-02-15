@@ -50,6 +50,6 @@ public class BeneficiarioSchema {
     @UpdateTimestamp
     private LocalDateTime dataAtualizacao;
 
-    @OneToMany(mappedBy = "beneficiario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "beneficiarioSchema", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DocumentoSchema> documentos = new ArrayList<>();
 }

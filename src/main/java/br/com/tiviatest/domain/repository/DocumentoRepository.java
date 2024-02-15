@@ -1,6 +1,5 @@
 package br.com.tiviatest.domain.repository;
 
-import br.com.tiviatest.domain.model.Beneficiario;
 import br.com.tiviatest.domain.model.Documento;
 
 import java.util.List;
@@ -10,7 +9,7 @@ public interface DocumentoRepository {
 
     Optional<Documento> findById(Long id);
 
-    List<Documento> findAllByBeneficiarioId(Beneficiario beneficiario);
+    List<Documento> findAllByBeneficiarioId(Long beneficiarioId);
 
     Documento save(Documento documento);
 

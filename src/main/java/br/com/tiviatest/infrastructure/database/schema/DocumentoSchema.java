@@ -46,5 +46,5 @@ public class DocumentoSchema {
 
     @ManyToOne
     @JoinColumn(name = "beneficiario_id")
-    private BeneficiarioSchema beneficiario;
+    private BeneficiarioSchema beneficiarioSchema;
 }

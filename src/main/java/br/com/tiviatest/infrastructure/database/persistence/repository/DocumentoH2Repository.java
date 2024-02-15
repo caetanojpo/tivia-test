@@ -24,8 +24,8 @@ public class DocumentoH2Repository implements DocumentoRepository {
     }
 
     @Override
-    public List<Documento> findAllByBeneficiarioId(Beneficiario beneficiario) {
-        return jpaRepository.findAllByBeneficiarioId(beneficiario).stream().map(DocumentoMapper.INSTANCE::toDocumento).toList();
+    public List<Documento> findAllByBeneficiarioId(Long beneficiarioId) {
+        return jpaRepository.findAllByBeneficiarioSchemaId(beneficiarioId).stream().map(DocumentoMapper.INSTANCE::toDocumento).toList();
     }
 
     @Override
