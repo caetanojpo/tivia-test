@@ -4,6 +4,7 @@ import br.com.tiviatest.domain.model.Documento;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoUpdatedRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.DocumentoResponse;
+import br.com.tiviatest.infrastructure.security.TokenService;
 import br.com.tiviatest.usecase.documento.CreateDocumento;
 import br.com.tiviatest.usecase.documento.FindDocumento;
 import br.com.tiviatest.usecase.documento.RemoveDocumento;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -52,6 +54,9 @@ class DocumentoControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private TokenService token;
+
+    @MockBean
     private FindDocumento find;
 
     @MockBean
@@ -68,7 +73,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Find by ID: Should return HTTP 200")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void byId() throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
         Documento mockedDocumento = mockDocumento();
 
         when(find.byId(anyLong())).thenReturn(mockedDocumento);
@@ -90,7 +98,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Find All by Documento ID: Should return HTTP 200")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void allByDocumentoId() throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
 
         Documento mockedDocumento1 = mockDocumento();
         Documento mockedDocumento2 = mockDocumento();
@@ -111,7 +122,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Find All: Should return HTTP 200")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void all() throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
 
         Documento mockedDocumento1 = mockDocumento();
         Documento mockedDocumento2 = mockDocumento();
@@ -132,7 +146,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Create: Should return HTTP 201")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void save() throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
         DocumentoCreateRequest request = new DocumentoCreateRequest("Teste", "551111111");
 
         Documento mockedDocumento = mockDocumento();
@@ -159,7 +176,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Update: Should return HTTP 200")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void update() throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
         DocumentoUpdatedRequest request = new DocumentoUpdatedRequest("Teste", "551111111");
 
         Documento mockedDocumento = mockDocumento();
@@ -186,8 +206,10 @@ class DocumentoControllerTest {
 
     @Test
     @DisplayName("Delete: Should return HTTP 204")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void remove() throws Exception {
-
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
         doNothing().when(remove).execute(id);
 
         MvcResult result = mvc.perform(delete(ROUTE + "/{id}", id))
@@ -198,7 +220,10 @@ class DocumentoControllerTest {
     @ParameterizedTest
     @MethodSource("getBadRequests")
     @DisplayName("Should return HTTP 400 when the input data are invalid")
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void badRequest(MockHttpServletRequestBuilder httpMethod) throws Exception {
+        String mockedSubject = "mockedTest";
+        when(token.getSubject(any())).thenReturn(mockedSubject);
         var response = mvc
                 .perform(httpMethod)
                 .andReturn().getResponse();

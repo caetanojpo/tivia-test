@@ -2,6 +2,7 @@ package br.com.tiviatest.infrastructure.configuration;
 
 import br.com.tiviatest.domain.repository.BeneficiarioRepository;
 import br.com.tiviatest.domain.repository.DocumentoRepository;
+import br.com.tiviatest.domain.repository.UserRepository;
 import br.com.tiviatest.usecase.beneficiario.CreateBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.FindBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.RemoveBeneficiario;
@@ -10,6 +11,8 @@ import br.com.tiviatest.usecase.documento.CreateDocumento;
 import br.com.tiviatest.usecase.documento.FindDocumento;
 import br.com.tiviatest.usecase.documento.RemoveDocumento;
 import br.com.tiviatest.usecase.documento.UpdateDocumento;
+import br.com.tiviatest.usecase.user.CreateUser;
+import br.com.tiviatest.usecase.user.FindUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -54,5 +57,15 @@ public class BeanConfiguration {
     @Bean
     public RemoveDocumento removeDocumento(DocumentoRepository documentoRepository, FindDocumento findDocumento) {
         return new RemoveDocumento(documentoRepository, findDocumento);
+    }
+
+    @Bean
+    public CreateUser createUser(UserRepository userRepository) {
+        return new CreateUser(userRepository);
+    }
+
+    @Bean
+    public FindUser findUser(UserRepository userRepository) {
+        return new FindUser(userRepository);
     }
 }

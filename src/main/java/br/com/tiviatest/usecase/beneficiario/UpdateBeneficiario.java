@@ -31,10 +31,6 @@ public class UpdateBeneficiario {
         return this.repository.update(toUpdateBeneficiario);
     }
 
-//    public void addDocument(Beneficiario beneficiario, Documento documento){
-//        beneficiario.getDocumentos().add(documento);
-//        this.repository.update(beneficiario);
-//    }
 
     private String validateForEmptyValue(String newValue, String currentValue) {
         return newValue != null && !newValue.trim().isEmpty() ? newValue : currentValue;
