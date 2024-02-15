@@ -76,7 +76,7 @@ public class DocumentoController {
         return ResponseEntity.ok(documentoResponseList);
     }
 
-    @PostMapping("{beneficiarioId}")
+    @PostMapping("/{beneficiarioId}")
     @Operation(summary = "Criar um novo Documento para um Beneficiario", method = "POST", description = "Informe o ID do beneficiario na rota, para criar um novo documento.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Documento criado com sucesso"),
@@ -91,7 +91,7 @@ public class DocumentoController {
         return ResponseEntity.created(uri).body(createdDocumento);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Atualizar um Documento", method = "PUT", description = "Informe o ID do Documento na rota para atualizar os seus dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Documento atualizado com sucesso"),
@@ -104,7 +104,7 @@ public class DocumentoController {
         return ResponseEntity.ok(updatedDocument);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Remover um Documento", method = "DELETE", description = "Informe o ID do documento na rota para remove-lo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Documento removido"),

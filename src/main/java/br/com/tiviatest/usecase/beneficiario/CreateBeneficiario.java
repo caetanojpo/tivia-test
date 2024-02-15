@@ -23,6 +23,7 @@ public class CreateBeneficiario {
 
         validateAndCreateDocumentos(savedBeneficiario);
 
+
         return savedBeneficiario;
     }
 

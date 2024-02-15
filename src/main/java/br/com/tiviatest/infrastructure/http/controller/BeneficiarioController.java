@@ -28,6 +28,7 @@ import java.util.List;
 @Tag(name = "beneficiario")
 public class BeneficiarioController {
 
+
     private final FindBeneficiario find;
     private final CreateBeneficiario create;
     private final UpdateBeneficiario update;
@@ -77,7 +78,7 @@ public class BeneficiarioController {
     }
 
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Atualizar os dados cadastrais de um Beneficiário por ID", method = "PUT", description = "Informe o ID do beneficiário na rota e envio o corpo para atualização.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Beneficiário atualizado com sucesso"),
