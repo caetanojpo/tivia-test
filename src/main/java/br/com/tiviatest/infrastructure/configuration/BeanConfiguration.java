@@ -37,8 +37,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public FindDocumento findDocumento(DocumentoRepository documentoRepository, FindBeneficiario findBeneficiario) {
-        return new FindDocumento(documentoRepository, findBeneficiario);
+    public FindDocumento findDocumento(DocumentoRepository documentoRepository) {
+        return new FindDocumento(documentoRepository);
     }
 
     @Bean

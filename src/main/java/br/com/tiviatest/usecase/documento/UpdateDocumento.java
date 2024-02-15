@@ -19,7 +19,7 @@ public class UpdateDocumento {
         toUpdateDocumento.setTipoDocumento(validateForEmptyValue(newDocumentoData.getTipoDocumento(), toUpdateDocumento.getTipoDocumento()));
         toUpdateDocumento.setDescricao(validateForEmptyValue(newDocumentoData.getDescricao(), toUpdateDocumento.getDescricao()));
 
-        return toUpdateDocumento;
+        return repository.save(toUpdateDocumento);
     }
 
     private String validateForEmptyValue(String newValue, String currentValue) {

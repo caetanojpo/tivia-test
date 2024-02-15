@@ -11,6 +11,8 @@ public interface DocumentoRepository {
 
     List<Documento> findAllByBeneficiarioId(Long beneficiarioId);
 
+    List<Documento> findAll();
+
     Documento save(Documento documento);
 
     Documento update(Documento documento);

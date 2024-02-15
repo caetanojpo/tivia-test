@@ -1,6 +1,5 @@
 package br.com.tiviatest.infrastructure.database.persistence.repository;
 
-import br.com.tiviatest.domain.model.Beneficiario;
 import br.com.tiviatest.domain.model.Documento;
 import br.com.tiviatest.domain.repository.DocumentoRepository;
 import br.com.tiviatest.infrastructure.database.persistence.springdata.DocumentoJpaRepository;
@@ -26,6 +25,11 @@ public class DocumentoH2Repository implements DocumentoRepository {
     @Override
     public List<Documento> findAllByBeneficiarioId(Long beneficiarioId) {
         return jpaRepository.findAllByBeneficiarioSchemaId(beneficiarioId).stream().map(DocumentoMapper.INSTANCE::toDocumento).toList();
+    }
+
+    @Override
+    public List<Documento> findAll() {
+        return jpaRepository.findAll().stream().map(DocumentoMapper.INSTANCE::toDocumento).toList();
     }
 
     @Override
