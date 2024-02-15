@@ -45,7 +45,7 @@ http://localhost:8080/swagger-ui/index.html
 
 ## Desafio
 
-Trata-se de desenvolvimento de API Rest, primordialmente baseada em duas Entidades primárias, quais sejam Beneficiário e Documento, com os desafios elencados em tópico anterior. As entidades foram modeladas com os seguintes atributos, em uma relação de 1 para muitos na ordem que segueÇ
+Trata-se de desenvolvimento de API Rest, primordialmente baseada em duas Entidades, quais sejam Beneficiário e Documento, com os desafios elencados em tópico anterior. As entidades foram modeladas com os seguintes atributos, em uma relação de 1 para muitos na ordem que segue:
 
 Beneficiario
 - id;
@@ -65,10 +65,20 @@ Documento
 
 ## Possibilidades para resolver o desafio
 
-<p>Para o desenvolvimento foi escolhida a utilização de arquitetura baseada em Clean Architecture, com o intuito de fazer o uso de boas práticas de programação e deixar o core da aplicação isolado, aplicando o uso de frameworks na camada de infraestrutura.</p>
+<p>Para o desenvolvimento foi escolhida a utilização de arquitetura baseada em Clean Architecture, com o intuito de fazer o uso de boas práticas de programação e deixar o core da aplicação isolado, deixando o uso de frameworks na camada de infraestrutura.</p>
 <p>A criação de um novo Beneficiário pode, ou não, ser realizada em conjunto com a sua lista de Documentos, caso o Beneficiario seja cadastrado sem documentos há um endpoint especifico para o cadastro e vinculação de Documentos a um Beneficiario especifico.</p>
 <p>Dada a opção de aplicar o sistema de autorização/autenticação no projeto, tomei a liberdade de modelar uma entidade User para lidar com toda a lógica de autenticação.</p>
-<p>A documentação da aplicação está disponível no swagger e já disponibilizei alguns registros em cada tabela, principalmente na User, para facilitar a obtenção de um Bearer Token.</p>
+<p>A documentação da aplicação está disponível no swagger e, também, disponilizei alguns registros em cada tabela, principalmente na User, para facilitar a obtenção de um Bearer Token.</p>
+
+
+```
+POST localhost:8080/api/users/login
+
+{
+    "email":"caetanojpo@gmail.com",
+    "password": "1234"
+}
+```
 
 
 ## SOLID, CLEAN ARCH E BOAS PRATICAS DE PROGRAMAÇÃO.
