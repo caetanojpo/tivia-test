@@ -9,6 +9,7 @@ import br.com.tiviatest.usecase.documento.CreateDocumento;
 import br.com.tiviatest.usecase.documento.FindDocumento;
 import br.com.tiviatest.usecase.documento.RemoveDocumento;
 import br.com.tiviatest.usecase.documento.UpdateDocumento;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,9 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/documentos")
+@RequestMapping("/api/documentos")
 @RequiredArgsConstructor
+@Tag(name = "documentos")
 public class DocumentoController {
 
     private final FindDocumento find;
@@ -36,7 +38,7 @@ public class DocumentoController {
     private final RemoveDocumento remove;
 
     private static final DocumentoMapper mapper = DocumentoMapper.INSTANCE;
-    private static final String ROUTE = "/documentos/{id}";
+    private static final String ROUTE = "/api/documentos/{id}";
 
 
     @GetMapping("/{id}")

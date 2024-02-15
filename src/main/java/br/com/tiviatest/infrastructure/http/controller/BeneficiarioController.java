@@ -9,6 +9,10 @@ import br.com.tiviatest.usecase.beneficiario.CreateBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.FindBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.RemoveBeneficiario;
 import br.com.tiviatest.usecase.beneficiario.UpdateBeneficiario;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +30,9 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/beneficiarios")
+@RequestMapping("/api//beneficiarios")
 @RequiredArgsConstructor
+@Tag(name = "beneficiario")
 public class BeneficiarioController {
 
     private final FindBeneficiario find;
@@ -36,9 +41,14 @@ public class BeneficiarioController {
     private final RemoveBeneficiario remove;
 
     private static final BeneficiarioMapper mapper = BeneficiarioMapper.INSTANCE;
-    private static final String ROUTE = "/beneficiarios/{id}";
+    private static final String ROUTE = "/api/beneficiarios/{id}";
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obter um Beneficiário por ID", method = "GET", description = "Informe o ID do beneficiário na rota para ver os seus dados detalhadamente.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Beneficiário encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado")
+    })
     public ResponseEntity<BeneficiarioResponse> byId(@PathVariable Long id) {
         var beneficiario = find.byId(id);
         var beneficiarioResponse = mapper.toBeneficiarioResponse(beneficiario);
