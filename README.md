@@ -75,7 +75,7 @@ Documento
 POST localhost:8080/api/users/login
 
 {
-    "email":"caetanojpo@gmail.com",
+    "email":"teste@teste.com",
     "password": "1234"
 }
 ```
@@ -84,19 +84,10 @@ POST localhost:8080/api/users/login
 ## SOLID, CLEAN ARCH E BOAS PRATICAS DE PROGRAMAÇÃO.
 <p>
 Para o desenvolvimento do projeto tentei fazer ao máximo o uso de boas práticas. 
-A nível de código podemos ver a utilização de alguns princípios do SOLID. 
-O single responsibility principle pode ser observado na implementação de classes
-coesas, pequenas, e que possuem um unico objetivo para a sua existência, talvez o 
-maior exemplo desse principio seja que para cada validação existe uma classe. O
-open closed principle pode ser visto na ValidatorsChainBeans, onde para adicionar
-um novo tipo de validação, não precisamos nos preocupar com as demais classes,
-nossa unica tarefa é criar um novo bean e adicioná-lo na corrente. O Dependency Inversion Principle
-pode ser encontrado por exemplo na implementação do repositório, a interface inicial se
-encontra na camada de domain, esta camada não pode enxergar a camada de infra, e nesse caso
-para que a camada de app tenha acesso a camada de infra, utilizamos o princípio de inversão
-de dependência. Por ultimo podemos observar a utilização do Interface Segregation Principle,
-pois temos interfaces coesas, e quando alguma classe a implementa, fazemos uso de todos
-os métodos disponíveis.
+A nível de código podemos ver a utilização de alguns princípios do SOLID.
+Tais como o uso de single responsibility principle, que pode ser observado na implementação de classes
+coesas, pequenas, e que possuem um unico objetivo para a sua existência. Assim como a inversão de depêndencia,
+utilização de Beans, e uso de interfaces coesas, para fazer o bom uso de seus métodos quando implementadas.
 </p>
 
 <p>
