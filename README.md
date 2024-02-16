@@ -128,5 +128,5 @@ de se tratar do número do documento, seria adequado, por boas práticas, altera
 
 Criado por João Pedro Caetano.
 
-[![Linkedin Badge](https://img.shields.io/badge/-Leonardo-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/leonardo-rodrigues-dantas/)](https://www.linkedin.com/in/caetanojpo/)
-[![Gmail Badge](https://img.shields.io/badge/-leonardordnt1317@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:caetanojpo@gmail.com)](mailto:caetanojpo@gmail.com)
+[![Linkedin Badge](https://img.shields.io/badge/João-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/caetanojpo/)](https://www.linkedin.com/in/caetanojpo/)
+[![Gmail Badge](https://img.shields.io/badge/-caetanojpo@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:caetanojpo@gmail.com)](mailto:caetanojpo@gmail.com)
