@@ -43,7 +43,7 @@ http://localhost:8080/swagger-ui/index.html
 - Spring Security
 - BCryptPasswordEncoder
 
-## Desafio
+## DESAFIO
 
 Trata-se de desenvolvimento de API Rest, primordialmente baseada em duas Entidades, quais sejam Beneficiário e Documento, com os desafios elencados em tópico anterior. As entidades foram modeladas com os seguintes atributos, em uma relação de 1 para muitos na ordem que segue:
 
@@ -63,7 +63,7 @@ Documento
 - dataAtualizacao.
 
 
-## Possibilidades para resolver o desafio
+## POSSIBILIDADES PARA RESOLVER O DESAFIO
 
 <p>Para o desenvolvimento foi escolhida a utilização de arquitetura baseada em Clean Architecture, com o intuito de fazer o uso de boas práticas de programação e deixar o core da aplicação isolado, deixando o uso de frameworks na camada de infraestrutura.</p>
 <p>A criação de um novo Beneficiário pode, ou não, ser realizada em conjunto com a sua lista de Documentos, caso o Beneficiario seja cadastrado sem documentos há um endpoint especifico para o cadastro e vinculação de Documentos a um Beneficiario especifico.</p>
