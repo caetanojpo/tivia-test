@@ -25,7 +25,9 @@ de beneficiários de um plano de saúde.
 # Clone este repositório
 git clone https://github.com/caetanojpo/tivia-test.git
 
-# Inicie a aplicação com uma IDE de sua preferência
+# Inicie a aplicação com uma IDE de sua preferência e digite no terminal
+mvn clean install
+mvn spring-boot:run
 
 #Acesse o seguinte endereço no navegador
 http://localhost:8080/swagger-ui/index.html
