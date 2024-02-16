@@ -1,7 +1,10 @@
 package br.com.tiviatest.infrastructure.database.schema;
 
+import br.com.tiviatest.domain.enums.TipoDocumento;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,7 +34,8 @@ public class DocumentoSchema {
     private Long id;
 
     @Column(name = "tipo_documento", nullable = false)
-    private String tipoDocumento;
+    @Enumerated(EnumType.STRING)
+    private TipoDocumento tipoDocumento;
 
     @Column(nullable = false)
     private String descricao;

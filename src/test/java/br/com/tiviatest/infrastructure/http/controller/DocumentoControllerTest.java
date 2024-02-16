@@ -1,9 +1,9 @@
 package br.com.tiviatest.infrastructure.http.controller;
 
+import br.com.tiviatest.domain.enums.TipoDocumento;
 import br.com.tiviatest.domain.model.Documento;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoUpdatedRequest;
-import br.com.tiviatest.infrastructure.http.dto.response.DocumentoResponse;
 import br.com.tiviatest.usecase.documento.CreateDocumento;
 import br.com.tiviatest.usecase.documento.FindDocumento;
 import br.com.tiviatest.usecase.documento.RemoveDocumento;
@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.ArrayList;
@@ -36,6 +35,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -78,7 +79,7 @@ class DocumentoControllerTest {
 
         when(find.byId(anyLong())).thenReturn(mockedDocumento);
 
-        MvcResult result = mvc.perform(get(ROUTE + "/{id}", id)).andExpect(status().isOk())
+        mvc.perform(get(ROUTE + "/{id}", id)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(mockedDocumento.getId()))
                 .andExpect(jsonPath("$.tipoDocumento").value(mockedDocumento.getTipoDocumento()))
                 .andExpect(jsonPath("$.descricao").value(mockedDocumento.getDescricao()))
@@ -86,13 +87,10 @@ class DocumentoControllerTest {
                 .andExpect(jsonPath("$.dataAtualizacao").value(mockedDocumento.getDataAtualizacao()))
                 .andReturn();
 
-        String responseBody = result.getResponse().getContentAsString();
-
-        DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
-
-        doAssertions(response, mockedDocumento);
 
         verify(find, times(1)).byId(any());
+        verifyNoMoreInteractions(find);
+        verifyNoInteractions(create, remove, update);
     }
 
     @Test
@@ -116,6 +114,8 @@ class DocumentoControllerTest {
                 .andReturn();
 
         verify(find, times(1)).allByBeneficiarioId(any());
+        verifyNoMoreInteractions(find);
+        verifyNoInteractions(create, remove, update);
     }
 
     @Test
@@ -139,19 +139,21 @@ class DocumentoControllerTest {
                 .andReturn();
 
         verify(find, times(1)).all();
+        verifyNoMoreInteractions(find);
+        verifyNoInteractions(create, remove, update);
     }
 
     @Test
     @DisplayName("Create: Should return HTTP 201")
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void save() throws Exception {
-        DocumentoCreateRequest request = new DocumentoCreateRequest("Teste", "551111111");
+        DocumentoCreateRequest request = new DocumentoCreateRequest(TipoDocumento.CPF, "551111111");
 
         Documento mockedDocumento = mockDocumento();
 
         when(create.execute(anyLong(), any())).thenReturn(mockedDocumento);
 
-        MvcResult result = mvc.perform(post(ROUTE + "/{id}", id)
+        mvc.perform(post(ROUTE + "/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -162,26 +164,22 @@ class DocumentoControllerTest {
                 .andExpect(jsonPath("$.dataAtualizacao").value(mockedDocumento.getDataAtualizacao()))
                 .andReturn();
 
-        String responseBody = result.getResponse().getContentAsString();
-
-        DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
-
-        doAssertions(response, mockedDocumento);
-
         verify(create, times(1)).execute(anyLong(), any());
+        verifyNoMoreInteractions(create);
+        verifyNoInteractions(remove, find, update);
     }
 
     @Test
     @DisplayName("Update: Should return HTTP 200")
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void update() throws Exception {
-        DocumentoUpdatedRequest request = new DocumentoUpdatedRequest("Teste", "551111111");
+        DocumentoUpdatedRequest request = new DocumentoUpdatedRequest(TipoDocumento.CPF, "551111111");
 
         Documento mockedDocumento = mockDocumento();
 
         when(update.execute(anyLong(), any())).thenReturn(mockedDocumento);
 
-        MvcResult result = mvc.perform(put(ROUTE + "/{id}", id)
+        mvc.perform(put(ROUTE + "/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -192,12 +190,10 @@ class DocumentoControllerTest {
                 .andExpect(jsonPath("$.dataAtualizacao").value(mockedDocumento.getDataAtualizacao()))
                 .andReturn();
 
-        String responseBody = result.getResponse().getContentAsString();
 
-        DocumentoResponse response = objectMapper.readValue(responseBody, DocumentoResponse.class);
-
-        doAssertions(response, mockedDocumento);
         verify(update, times(1)).execute(anyLong(), any());
+        verifyNoMoreInteractions(update);
+        verifyNoInteractions(create, find, remove);
     }
 
     @Test
@@ -206,11 +202,13 @@ class DocumentoControllerTest {
     void remove() throws Exception {
         doNothing().when(remove).execute(id);
 
-        MvcResult result = mvc.perform(delete(ROUTE + "/{id}", id))
+        mvc.perform(delete(ROUTE + "/{id}", id))
                 .andExpect(status().isNoContent())
                 .andReturn();
 
         verify(remove, times(1)).execute(anyLong());
+        verifyNoMoreInteractions(remove);
+        verifyNoInteractions(create, find, update);
     }
 
     @ParameterizedTest
@@ -238,11 +236,4 @@ class DocumentoControllerTest {
         return Mockito.mock(Documento.class);
     }
 
-    private static void doAssertions(DocumentoResponse response, Documento mockedDocumento) {
-        assertThat(response.id()).isEqualTo(mockedDocumento.getId());
-        assertThat(response.tipoDocumento()).isEqualTo(mockedDocumento.getTipoDocumento());
-        assertThat(response.descricao()).isEqualTo(mockedDocumento.getDescricao());
-        assertThat(response.dataInclusao()).isEqualTo(mockedDocumento.getDataInclusao());
-        assertThat(response.dataAtualizacao()).isEqualTo(mockedDocumento.getDataAtualizacao());
-    }
 }

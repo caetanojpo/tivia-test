@@ -1,5 +1,6 @@
 package br.com.tiviatest.infrastructure.security.filter;
 
+import br.com.tiviatest.domain.exception.ObjectNotFoundException;
 import br.com.tiviatest.infrastructure.database.persistence.springdata.UserJpaRepository;
 import br.com.tiviatest.infrastructure.security.TokenService;
 import jakarta.servlet.FilterChain;
@@ -27,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var email = tokenService.getSubject(token);
-            UserDetails user = userRepository.findByEmail(email);
+            UserDetails user = userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado sob o email: " + email));
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

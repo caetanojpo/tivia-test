@@ -1,17 +1,19 @@
 package br.com.tiviatest.domain.model;
 
+import br.com.tiviatest.domain.enums.TipoDocumento;
+
 import java.time.LocalDateTime;
 
 public class Documento {
 
     private Long id;
-    private String tipoDocumento;
+    private TipoDocumento tipoDocumento;
     private String descricao;
     private LocalDateTime dataInclusao;
     private LocalDateTime dataAtualizacao;
     private Beneficiario beneficiario;
 
-    public Documento(Long id, String tipoDocumento, String descricao, LocalDateTime dataInclusao, LocalDateTime dataAtualizacao, Beneficiario beneficiario) {
+    public Documento(Long id, TipoDocumento tipoDocumento, String descricao, LocalDateTime dataInclusao, LocalDateTime dataAtualizacao, Beneficiario beneficiario) {
         this.id = id;
         this.tipoDocumento = tipoDocumento;
         this.descricao = descricao;
@@ -31,11 +33,11 @@ public class Documento {
         this.id = id;
     }
 
-    public String getTipoDocumento() {
+    public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(String tipoDocumento) {
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
 

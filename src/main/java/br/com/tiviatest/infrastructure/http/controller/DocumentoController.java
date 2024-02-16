@@ -1,6 +1,7 @@
 package br.com.tiviatest.infrastructure.http.controller;
 
 import br.com.tiviatest.domain.model.Documento;
+import br.com.tiviatest.domain.util.MessageUtil;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoCreateRequest;
 import br.com.tiviatest.infrastructure.http.dto.request.DocumentoUpdatedRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.DocumentoResponse;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "documentos")
 @SecurityRequirement(name = "bearer-key")
+@Slf4j
 public class DocumentoController {
 
     private final FindDocumento find;
@@ -53,8 +56,10 @@ public class DocumentoController {
             @ApiResponse(responseCode = "404", description = "Documento não encontrado")
     })
     public ResponseEntity<DocumentoResponse> byId(@PathVariable Long id) {
+        log.info(MessageUtil.BUSCANDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         var documentoResponse = mapper.toDocumentoResponse(find.byId(id));
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(documentoResponse);
     }
 
@@ -65,10 +70,13 @@ public class DocumentoController {
             @ApiResponse(responseCode = "404", description = "Beneficiario não encontrado")
     })
     public ResponseEntity<List<DocumentoResponse>> allByBeneficiarioId(@PathVariable Long beneficiarioId) {
+        log.info(MessageUtil.BUSCANDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         List<Documento> documentos = find.allByBeneficiarioId(beneficiarioId);
 
+        log.info(MessageUtil.MAP_ENT);
         List<DocumentoResponse> documentoResponses = documentos.stream().map(DocumentoMapper.INSTANCE::toDocumentoResponse).toList();
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(documentoResponses);
     }
 
@@ -78,10 +86,13 @@ public class DocumentoController {
             @ApiResponse(responseCode = "200", description = "Documentos listados com sucesso"),
     })
     public ResponseEntity<List<DocumentoResponse>> all() {
+        log.info(MessageUtil.BUSCANDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         List<Documento> documentos = find.all();
 
+        log.info(MessageUtil.MAP_ENT);
         List<DocumentoResponse> documentoResponseList = documentos.stream().map(DocumentoMapper.INSTANCE::toDocumentoResponse).toList();
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(documentoResponseList);
     }
 
@@ -89,14 +100,18 @@ public class DocumentoController {
     @Operation(summary = "Criar um novo Documento para um Beneficiario", method = "POST", description = "Informe o ID do beneficiario na rota, para criar um novo documento.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Documento criado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado")
+            @ApiResponse(responseCode = "404", description = "Beneficiario não encontrado")
     })
     public ResponseEntity<DocumentoResponse> save(@PathVariable Long beneficiarioId, @RequestBody @Valid DocumentoCreateRequest documentoCreateRequest, UriComponentsBuilder uriComponentsBuilder) {
+        log.info(MessageUtil.MAP_ENT);
         var documento = mapper.toDocumento(documentoCreateRequest);
+
+        log.info(MessageUtil.INSERINDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         var createdDocumento = mapper.toDocumentoResponse(create.execute(beneficiarioId, documento));
 
         URI uri = uriComponentsBuilder.path(ROUTE).buildAndExpand(createdDocumento.id()).toUri();
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.created(uri).body(createdDocumento);
     }
 
@@ -107,9 +122,14 @@ public class DocumentoController {
             @ApiResponse(responseCode = "404", description = "Documento não encontrado")
     })
     public ResponseEntity<DocumentoResponse> update(@PathVariable Long id, @RequestBody @Valid DocumentoUpdatedRequest documentoUpdatedRequest) {
+
+        log.info(MessageUtil.MAP_ENT);
         var documento = mapper.toDocumento(documentoUpdatedRequest);
+
+        log.info(MessageUtil.ATUALIZANDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         var updatedDocument = mapper.toDocumentoResponse(update.execute(id, documento));
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(updatedDocument);
     }
 
@@ -120,7 +140,10 @@ public class DocumentoController {
             @ApiResponse(responseCode = "404", description = "Documento não encontrado")
     })
     public ResponseEntity<Void> remove(@PathVariable Long id) {
+        log.info(MessageUtil.REMOVENDO_OBJETO_BD, MessageUtil.DOCUMENTO_ENTIDADE_NOME);
         remove.execute(id);
+
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.noContent().build();
     }
 

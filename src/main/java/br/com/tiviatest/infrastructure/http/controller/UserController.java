@@ -1,5 +1,6 @@
 package br.com.tiviatest.infrastructure.http.controller;
 
+import br.com.tiviatest.domain.util.MessageUtil;
 import br.com.tiviatest.infrastructure.database.schema.UserSchema;
 import br.com.tiviatest.infrastructure.http.dto.request.UserRequest;
 import br.com.tiviatest.infrastructure.http.dto.response.JWTResponse;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Tag(name = "users")
+@Slf4j
 public class UserController {
 
     private final CreateUser create;
@@ -45,12 +48,15 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "Documento encontrado com sucesso"),
     })
     public ResponseEntity<UserResponse> create(@RequestBody @Valid UserRequest userData, UriComponentsBuilder uriBuilder) {
-
+        log.info(MessageUtil.MAP_ENT);
         var user = mapper.toUser(userData);
+
+        log.info(MessageUtil.INSERINDO_OBJETO_BD, MessageUtil.USER_ENTIDADE_NOME);
         var createdUser = create.execute(user);
 
-        var uri = uriBuilder.path("/api/v1/users/{id}").buildAndExpand(createdUser.getId()).toUri();
+        var uri = uriBuilder.path("/api/users/{id}").buildAndExpand(createdUser.getId()).toUri();
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.created(uri).body(mapper.toUserResponse(createdUser));
     }
 
@@ -60,11 +66,15 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Usuário logado. Token no corpo da resposta"),
     })
     public ResponseEntity<JWTResponse> login(@RequestBody @Valid UserRequest userData) {
+        log.info(MessageUtil.BUSCANDO_OBJETO_BD, MessageUtil.USER_ENTIDADE_NOME);
+        find.byEmail(userData.email());
+        log.info(MessageUtil.LOGANDO_USER_SISTEMA);
         var token = new UsernamePasswordAuthenticationToken(userData.email(), userData.password());
         var authentication = manager.authenticate(token);
 
         var jwt = tokenService.generateToken((UserSchema) authentication.getPrincipal());
 
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(new JWTResponse(jwt));
     }
 
@@ -76,8 +86,13 @@ public class UserController {
     })
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<UserResponse> detail(@PathVariable String email) {
+        log.info(MessageUtil.BUSCANDO_OBJETO_BD, MessageUtil.USER_ENTIDADE_NOME);
         var user = find.byEmail(email);
+
+        log.info(MessageUtil.MAP_ENT);
         var userResponse = mapper.toUserResponse(user);
+
+        log.info(MessageUtil.RETORNO_HTTP);
         return ResponseEntity.ok(userResponse);
     }
 }

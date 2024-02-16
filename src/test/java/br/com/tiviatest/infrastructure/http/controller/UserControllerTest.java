@@ -29,6 +29,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,13 +62,14 @@ class UserControllerTest {
 
 
     private static final String ROUTE = "/api/users";
-    private static final String email = "teste@teste.com";
+    private static final String email = "unitario@teste.com";
+    private static final String password = "!@Teste1234";
 
 
     @Test
     @DisplayName("Create: Should return HTTP 201")
     void create() throws Exception {
-        UserRequest userRequest = new UserRequest(email, "1234");
+        UserRequest userRequest = new UserRequest(email, password);
 
         User mockedUser = mockUser();
 
@@ -87,17 +90,20 @@ class UserControllerTest {
         doAssertions(response, mockedUser);
 
         verify(create, times(1)).execute(any());
+        verifyNoMoreInteractions(create);
+        verifyNoInteractions(find, manager, tokenService);
     }
 
     @Test
     @DisplayName("Login: Should return HTTP 200")
     void login() throws Exception {
-        UserRequest userRequest = new UserRequest("test@example.com", "1234");
+        UserRequest userRequest = new UserRequest(email, password);
         Authentication mockAuthentication = Mockito.mock(Authentication.class);
         JWT mockJwt = Mockito.mock(JWT.class);
 
         User mockedUser = mockUser();
 
+        when(find.byEmail(any())).thenReturn(mockedUser);
         when(manager.authenticate(any())).thenReturn(mockAuthentication);
         doReturn(mockJwt.toString()).when(tokenService).generateToken(any(UserSchema.class));
 
@@ -108,9 +114,10 @@ class UserControllerTest {
                 .andReturn();
 
 
+        verify(find, times(1)).byEmail(any());
         verify(manager, times(1)).authenticate(any());
         verify(tokenService, times(1)).generateToken((UserSchema) mockAuthentication.getPrincipal());
-
+        verifyNoInteractions(create);
     }
 
     @Test
@@ -134,6 +141,8 @@ class UserControllerTest {
         doAssertions(response, mockedUser);
 
         verify(find, times(1)).byEmail(any());
+        verifyNoMoreInteractions(find);
+        verifyNoInteractions(create, manager, tokenService);
     }
 
     private static User mockUser() {

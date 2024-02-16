@@ -28,7 +28,7 @@ public class TokenService {
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
-            throw new TokenException("Error ao gerar um novo Token", exception);
+            throw new TokenException("Error ao gerar um novo Token");
         }
     }
 

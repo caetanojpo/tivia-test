@@ -1,5 +1,6 @@
 package br.com.tiviatest.infrastructure.security;
 
+import br.com.tiviatest.domain.exception.ObjectNotFoundException;
 import br.com.tiviatest.infrastructure.database.persistence.springdata.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,6 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return jpaRepository.findByEmail(email);
+        return jpaRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado sob o email: " + email));
     }
 }

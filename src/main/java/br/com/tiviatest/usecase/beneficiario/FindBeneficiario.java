@@ -15,7 +15,7 @@ public class FindBeneficiario {
     }
 
     public Beneficiario byId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("O Beneficiário não pode ser encontrado sob o id: " + id));
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("O Beneficiario não pode ser encontrado sob o id: " + id));
     }
 
     public List<Beneficiario> all() {

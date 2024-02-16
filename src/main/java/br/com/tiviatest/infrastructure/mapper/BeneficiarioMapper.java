@@ -18,7 +18,6 @@ public interface BeneficiarioMapper {
     @Mapping(target = "documentos", source = "documentoSchemas")
     Beneficiario toBeneficiario(BeneficiarioSchema beneficiarioSchema);
 
-    @Mapping(target = "documentos", source = "documentos")
     Beneficiario toBeneficiario(BeneficiarioCreateRequest beneficiarioCreateRequest);
 
     @Mapping(target = "documentos", ignore = true)
@@ -27,7 +26,6 @@ public interface BeneficiarioMapper {
     @Mapping(target = "documentoSchemas", source = "documentos")
     BeneficiarioSchema toBeneficiarioSchema(Beneficiario beneficiario);
 
-    @Mapping(target = "documentos", source = "documentos")
     BeneficiarioResponse toBeneficiarioResponse(Beneficiario beneficiario);
 
 }

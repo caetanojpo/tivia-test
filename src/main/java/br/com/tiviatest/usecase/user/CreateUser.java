@@ -13,7 +13,7 @@ public class CreateUser {
     }
 
     public User execute(User user) {
-        if (repository.findByEmail(user.getEmail()) != null) throw new BadRequestException("Usuário já cadastrado");
+        if (repository.findByEmail(user.getEmail()).isPresent()) throw new BadRequestException("Usuário já cadastrado");
         return repository.save(user);
     }
 }

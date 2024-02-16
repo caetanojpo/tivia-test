@@ -16,7 +16,7 @@ public class UpdateDocumento {
     public Documento execute(Long id, Documento newDocumentoData) {
         Documento toUpdateDocumento = find.byId(id);
 
-        toUpdateDocumento.setTipoDocumento(validateForEmptyValue(newDocumentoData.getTipoDocumento(), toUpdateDocumento.getTipoDocumento()));
+        toUpdateDocumento.setTipoDocumento(newDocumentoData.getTipoDocumento() != null ? newDocumentoData.getTipoDocumento() : toUpdateDocumento.getTipoDocumento());
         toUpdateDocumento.setDescricao(validateForEmptyValue(newDocumentoData.getDescricao(), toUpdateDocumento.getDescricao()));
 
         return repository.save(toUpdateDocumento);

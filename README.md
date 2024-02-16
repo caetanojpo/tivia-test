@@ -76,7 +76,7 @@ POST localhost:8080/api/users/login
 
 {
     "email":"teste@teste.com",
-    "password": "1234"
+    "password": "!123Teste"
 }
 ```
 
@@ -86,7 +86,7 @@ POST localhost:8080/api/users/login
 Para o desenvolvimento do projeto tentei fazer ao máximo o uso de boas práticas. 
 A nível de código podemos ver a utilização de alguns princípios do SOLID.
 Tais como o uso de single responsibility principle, que pode ser observado na implementação de classes
-coesas, pequenas, e que possuem um unico objetivo para a sua existência. Assim como a inversão de depêndencia,
+consistentes, pequenas, e que possuem um unico objetivo para a sua existência. Assim como a inversão de depêndencia,
 utilização de Beans, e uso de interfaces coesas, para fazer o bom uso de seus métodos quando implementadas.
 </p>
 
@@ -101,6 +101,8 @@ controllers, implementação da database, assim como as configurações do proje
 - **USECASE**: É a responsável por conter as regras crucias de negocio,
 são aquelas regras que sempre existiram na empresa e eram executadas de forma manual.
 
+## TESTES UNITÁRIOS
+<p>Foram escritos testes unitários para as controladoras das 3 entidades.</p>
 
 ## PROPOSTAS DE MELHORIA
 
@@ -111,6 +113,8 @@ isso melhoraria a estruturação, manutenção e confiabilidade de todo o sistem
 a fim de trazer flexibilidade e dinamismo para a estruturação dos documentos.
 - Utilização do redis para se trabalhar com cache e evitar que o usuário envie a mesma senha por diversas vezes,
 derrubando servidor.
+- A entidade Documento possui o campo "descricao", contudo o mesmo leva a uma confusão, pois pode não remeter à ideia
+de se tratar do número do documento, seria adequado, por boas práticas, alterar o nome do campo ou acrescentar um novo.
 
 ## Tecnologias
 

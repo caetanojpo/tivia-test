@@ -1,5 +1,6 @@
 package br.com.tiviatest.usecase.user;
 
+import br.com.tiviatest.domain.exception.ObjectNotFoundException;
 import br.com.tiviatest.domain.model.User;
 import br.com.tiviatest.domain.repository.UserRepository;
 
@@ -12,6 +13,6 @@ public class FindUser {
     }
 
     public User byEmail(String email) {
-        return repository.findByEmail(email);
+        return repository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Usuário não encontra pelo email: " + email));
     }
 }

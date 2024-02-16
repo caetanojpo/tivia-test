@@ -1,0 +1,4 @@
+INSERT INTO "USERS" (id, email, password) VALUES (100, 'teste@teste.com.br', '$2a$12$9uUDfVKbGqzH54ec.e2kfu4Up.NI3llYOB0ZOspzp33dWqjR/tIdG');
+INSERT INTO "BENEFICIARIOS" (id, nome, telefone, data_nascimento, data_inclusao, data_atualizacao) VALUES (100, 'Teste', '+5511111111111', '2000-01-01', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "DOCUMENTOS" (id, tipo_documento, descricao, beneficiario_id, data_inclusao, data_atualizacao) VALUES (100, 'CPF', '111.111.111-11', 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "DOCUMENTOS" (id, tipo_documento, descricao, beneficiario_id, data_inclusao, data_atualizacao) VALUES (200, 'RG', '11.111.111-1', 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
